@@ -7,6 +7,10 @@ class StatusType(Enum):
     PENDING = "Pending"
     DONE = "Done"
 
+    def __str__(self):
+        return self.value
+
+
 
 # 任務表格
 class Task(models.Model):
