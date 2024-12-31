@@ -1,10 +1,11 @@
 from django.http import HttpRequest, JsonResponse
 from ninjadjangoapp.models import StatusType, Task
+from ninjadjangoapp.schemas import CreateTaskRequest, UpdateTaskRequest
 from ninjadjangoapp.serializers import TaskSerializer
 from ninja import Body
 
 
-def create_task(request: HttpRequest, body: any = Body(...)):
+def create_task(request: HttpRequest, body: CreateTaskRequest = Body(...)):
     """
     創建任務
     """
@@ -54,7 +55,7 @@ def get_all_tasks(request: HttpRequest):
 
 
 
-def update_task_by_id(request: HttpRequest, id: int, body: any = Body(...)):
+def update_task_by_id(request: HttpRequest, id: int, body: UpdateTaskRequest = Body(...)):
     """
     根據任務 ID 更新任務資訊
     """
