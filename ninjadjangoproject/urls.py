@@ -18,6 +18,8 @@ from django.http import JsonResponse
 from django.urls import path
 from ninja import NinjaAPI, Router
 from ninjadjangoapp.urls import router as api_router
+from ninja.errors import ValidationError
+from django.http import HttpRequest, JsonResponse
 
 
 ninja_api = NinjaAPI(
@@ -25,6 +27,35 @@ ninja_api = NinjaAPI(
     version="1.0",
     description="Ninja API 文件",
 )
+
+# 客製化驗證錯誤
+@ninja_api.exception_handler(ValidationError)
+def custom_validation_error_handler(request: HttpRequest, exc: ValidationError):
+
+    # 缺少資料
+    for error in exc.errors:
+        if error["type"] == "missing":
+            return JsonResponse({
+                "error": "Invalid Parameter Error",
+                "message": f"Should provide {error['loc'][-1]} in request {error['loc'][-2]}."
+            }, status=400)
+
+    # 其他類型的錯誤
+    error_details = [
+        {
+            "loc": error["loc"][-1],  # 錯誤發生的位置
+            "msg": error["msg"],      # 錯誤訊息
+            "type": error["type"],    # 錯誤類型
+        }
+        for error in exc.errors
+    ]
+
+    return JsonResponse({
+        "error": "Invalid Parameter Error",
+        "message": f"Validation failed: {', '.join([d['msg'] for d in error_details])}"
+    }, status=400)
+
+
 
 # 檢驗 Service 是否健康路由
 health_router = Router()

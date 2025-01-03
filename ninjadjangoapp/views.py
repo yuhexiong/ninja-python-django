@@ -15,6 +15,12 @@ def create_task(request: HttpRequest, body: CreateTaskRequest = Body(...)):
     status = body.status
     due_date = body.due_date
 
+    if not title or title == '':
+        return JsonResponse({
+            "error": "Invalid Parameter Error",
+            "message": f"Parameter title should not be empty in request body."
+        }, status=400)
+
     new_task = Task(
         title=title,
         description=description,
@@ -29,7 +35,7 @@ def create_task(request: HttpRequest, body: CreateTaskRequest = Body(...)):
 
 def get_task_by_id(request: HttpRequest, id: int):
     """
-    根據任務 ID 查詢任務資訊
+    根據任務 id 查詢任務資訊
     """
 
     task = Task.objects.filter(id=id).first()
@@ -48,7 +54,8 @@ def get_all_tasks(request: HttpRequest):
     """
     查詢所有任務資訊
     """
-    tasks = Task.objects.filter(status=StatusType.PENDING.value).order_by('id').all()
+
+    tasks = Task.objects.order_by('id').all()
     serializer = TaskSerializer(tasks, many=True)
 
     return JsonResponse({"data": serializer.data}, status=200)
@@ -57,7 +64,7 @@ def get_all_tasks(request: HttpRequest):
 
 def update_task_by_id(request: HttpRequest, id: int, body: UpdateTaskRequest = Body(...)):
     """
-    根據任務 ID 更新任務資訊
+    根據任務 id 更新任務資訊
     """
 
     title = body.title
@@ -90,7 +97,7 @@ def update_task_by_id(request: HttpRequest, id: int, body: UpdateTaskRequest = B
 
 def delete_task_by_id(request: HttpRequest, id: int):
     """
-    根據任務 ID 刪除任務資訊
+    根據任務 id 刪除任務資訊
     """
 
     task = Task.objects.filter(id=id).first()

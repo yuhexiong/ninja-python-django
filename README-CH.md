@@ -1,9 +1,6 @@
 # Ninja
 
-**(also provided Traditional Chinese version document [README-CH.md](README-CH.md).)**
-
-
-Demonstration of how to use ninja to manage Django URLs and automatically generate swagger files.  
+展示如何使用 Ninja 管理 Django URL 並自動生成 Swagger 文件。
 
 ## Overview
 
@@ -12,7 +9,8 @@ Demonstration of how to use ninja to manage Django URLs and automatically genera
 
 ## ENV
 
-copy `.env.example` as `.env`
+
+將 `.env.example` 複製為 `.env`  
 
 ```yaml
 DB_NAME=postgres
@@ -33,7 +31,7 @@ DEBUG=True
 python manage.py migrate
 ```
 
-### Install Module
+#### Install Module
 
 ```bash
 poetry install
@@ -46,9 +44,8 @@ poetry install
 python manage.py runserver
 ```
 
-
-server running at `http://localhost:8000`  
-swagger document at `http://localhost:8000/docs`  
+伺服器運行在 `http://localhost:8000`  
+swagger 文件在 `http://localhost:8000/docs`  
 
 ## Test
 
