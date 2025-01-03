@@ -31,7 +31,7 @@ DEBUG=True
 python manage.py migrate
 ```
 
-#### Install Module
+### Install Module
 
 ```bash
 poetry install
