@@ -20,6 +20,7 @@ from ninja import NinjaAPI, Router
 from ninjadjangoapp.urls import router as api_router
 from ninja.errors import ValidationError
 from django.http import HttpRequest, JsonResponse
+from rest_framework import status as http_status
 
 
 ninja_api = NinjaAPI(
@@ -38,7 +39,7 @@ def custom_validation_error_handler(request: HttpRequest, exc: ValidationError):
             return JsonResponse({
                 "error": "Invalid Parameter Error",
                 "message": f"Should provide {error['loc'][-1]} in request {error['loc'][-2]}."
-            }, status=400)
+            }, status=http_status.HTTP_400_BAD_REQUEST)
 
     # 其他類型的錯誤
     error_details = [
@@ -53,7 +54,7 @@ def custom_validation_error_handler(request: HttpRequest, exc: ValidationError):
     return JsonResponse({
         "error": "Invalid Parameter Error",
         "message": f"Validation failed: {', '.join([d['msg'] for d in error_details])}"
-    }, status=400)
+    }, status=http_status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -61,7 +62,7 @@ def custom_validation_error_handler(request: HttpRequest, exc: ValidationError):
 health_router = Router()
 @health_router.get("/", tags=["Health Check"])
 def health_check(request):
-    return JsonResponse({}, status=200)
+    return JsonResponse({}, status=http_status.HTTP_200_OK)
 
 
 # 使用 ninja api 來管理路由, swagger 文件自動掛載在 /docs 下面
